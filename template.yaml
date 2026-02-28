@@ -50,8 +50,7 @@ Resources:
           AllowOrigins:
             - !Ref FrontendOrigin
           AllowMethods:
-            - GET
-            - POST
+            - *
           AllowHeaders:
             - "Content-Type"
 
