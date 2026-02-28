@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  SsmArn:
+    Type: String
+    Description: "The ARN used for the SSM IAM role"
+  KmsArn:
+    Type: String
+    Description: "The ARN used for the KMS IAM role"
+  FrontendOrigin:
+    Type: String
+    Description: "The URL of the frontend allowed to call this API"
+
+Globals:
+  Function:
+    Runtime: python3.12
+    MemorySize: 256
+    Timeout: 30
+    Architectures: [arm64]
+    Tracing: Active
+    Environment:
+      Variables:
+        TODOIST_PARAM: '/task-checker/prod/TODOIST_API_TOKEN'
+
+Resources:
+  BFFFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: luing-ui-bff
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Description: Deployed by GitHub Actions via SAM
+      Policies:
+        - Statement:
+            Effect: Allow
+            Action:
+              - ssm:GetParameter
+              - ssm:GetParameters
+              - ssm:GetParametersByPath
+            Resource: !Ref SsmArn
+        - Statement:
+            Effect: Allow
+            Action:
+              - kms:Decrypt
+            Resource: !Ref KmsArn
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - !Ref FrontendOrigin
+          AllowMethods:
+            - GET
+            - POST
+          AllowHeaders:
+            - "Content-Type"
+
+Outputs:
+  BFFUrl:
+    Description: "Function URL for BFF"
+    Value: !GetAtt BFFFunctionUrl.FunctionUrl
