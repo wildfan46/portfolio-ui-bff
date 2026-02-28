@@ -22,6 +22,11 @@ Globals:
     Environment:
       Variables:
         TODOIST_PARAM: '/task-checker/prod/TODOIST_API_TOKEN'
+  Api:
+    Cors:
+      AllowMethods: "'OPTIONS,GET,POST'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: !Sub "'${FrontendOrigin}'"
 
 Resources:
   BFFFunction:
@@ -44,15 +49,6 @@ Resources:
             Action:
               - kms:Decrypt
             Resource: !Ref KmsArn
-      FunctionUrlConfig:
-        AuthType: NONE
-        Cors:
-          AllowOrigins:
-            - !Ref FrontendOrigin
-          AllowMethods:
-            - "*"
-          AllowHeaders:
-            - "Content-Type"
 
 Outputs:
   BFFUrl:
