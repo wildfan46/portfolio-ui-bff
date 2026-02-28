@@ -49,8 +49,3 @@ Resources:
             Action:
               - kms:Decrypt
             Resource: !Ref KmsArn
-
-Outputs:
-  BFFUrl:
-    Description: "Function URL for BFF"
-    Value: !GetAtt BFFFunctionUrl.FunctionUrl
