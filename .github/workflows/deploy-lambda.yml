@@ -37,13 +37,13 @@ jobs:
         run: sam build
 
       - name: Deploy
-        run: >
-          sam deploy
-          --stack-name ${{ secrets.SAM_STACK_NAME }}
-          --s3-bucket ${{ secrets.SAM_BUCKET }}
-          --no-confirm-changeset
-          --capabilities CAPABILITY_IAM
-          --parameter-overrides
-            SsmArn=${{ secrets.SSM_ARN }}
-            KmsArn=${{ secrets.KMS_ARN }}
-            FrontendOrigin=${{ secrets.FRONTEND_ORIGIN }}
+        run: |
+          sam deploy \
+          --stack-name "${{ secrets.SAM_STACK_NAME }}" \
+          --s3-bucket "${{ secrets.SAM_BUCKET }}" \
+          --no-confirm-changeset \
+          --capabilities CAPABILITY_IAM \
+          --parameter-overrides \
+            "SsmArn=${{ secrets.SSM_ARN }}" \
+            "KmsArn=${{ secrets.KMS_ARN }}" \
+            "FrontendOrigin=${{ secrets.FRONTEND_ORIGIN }}"
