@@ -19,6 +19,7 @@ def create_todoist_task(
         project_id: str,
         section_id: str,
         email: str,
+        description: str = None,
 ):
     headers = {
         "Authorization": f"Bearer {token}",
@@ -30,6 +31,8 @@ def create_todoist_task(
         "section_id": section_id,
         "due_date": get_local_today().date().isoformat(),
     }
+    if description is not None:
+        data["description"] = description
     try:
         req = urllib.request.Request(
             tasks_url,

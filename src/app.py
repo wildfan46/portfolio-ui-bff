@@ -21,12 +21,14 @@ def lambda_handler(event, context):
     elif method == "POST":
         body = json.loads(event.get('body', '{}'))
         target_email = body.get('email', 'Unknown Email')
+        target_description = body.get('description', None)
 
         task_id = todoist.create_todoist_task(
             config['TODOIST_API_TOKEN'],
             config['PROFESSIONAL_PROJECT_ID'],
             config['GROWTH_SECTION_ID'],
-            target_email
+            target_email,
+            target_description
         )
         response_body = {
             "id": task_id
